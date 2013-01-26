@@ -1,0 +1,9 @@
+process.o: process.c
+process.o: C:\Software\Keil\ARM\Inc\NXP\LPC17xx\LPC17xx.h
+process.o: C:\Software\Keil\ARM\CMSIS\Include\core_cm3.h
+process.o: C:\Software\Keil\ARM\ARMCC\bin\..\include\stdint.h
+process.o: C:\Software\Keil\ARM\CMSIS\Include\core_cmInstr.h
+process.o: C:\Software\Keil\ARM\CMSIS\Include\core_cmFunc.h
+process.o: C:\Software\Keil\ARM\Inc\NXP\LPC17xx\system_LPC17xx.h
+process.o: uart_polling.h
+process.o: process.h
