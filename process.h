@@ -74,6 +74,7 @@ int linearSearch(process_PQ *, int);
 */
 
 uint32_t stackNull[USR_SZ_STACK];     /* stack for proc2 */
+
 uint32_t stack1[USR_SZ_STACK];     /* stack for proc1 */
 uint32_t stack2[USR_SZ_STACK];     /* stack for proc2 */
 uint32_t stack3[USR_SZ_STACK];     /* stack for proc3 */
@@ -88,8 +89,14 @@ pcb_t *pcb2;
 pcb_t *pcb3;
 pcb_t *pcb4;
 
-pcb_t  *gp_current_process = NULL; /* always point to the current process */
+pcb_t *pcbTest1;
+pcb_t *pcbTest2;
+pcb_t *pcbTest3;
+pcb_t *pcbTest4;
+pcb_t *pcbTest5;
+pcb_t *pcbTest6;
 
+pcb_t  *gp_current_process = NULL; /* always point to the current process */
 
 extern void process_init(void);    /* initialize all procs in the system */
 int scheduler(void);               /* pick the pid of the next to run process */
@@ -99,6 +106,10 @@ extern void proc1(void);           /* user process 1 */
 extern void proc2(void);           /* user process 2 */
 extern void proc3(void);           /* user process 3 */
 extern void proc4(void);           /* user process 4 */
+
+extern void procTestRequestMemoryBlock(void);           
+extern void procTestReleaseMemoryBlock(void);           
+extern void procTestSomething(void);
 
 extern void procNULL(void);           /* user process NULL */
 extern void procA(void);           /* user process  */

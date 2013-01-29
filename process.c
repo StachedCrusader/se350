@@ -30,6 +30,7 @@
  *       points of each process so that this code does not have to hard code
  *       proc1 and proc2 symbols. We leave all these imperfections as excercies to the reader 
  */
+ 
 void process_init() 
 {
   volatile int i;
@@ -37,14 +38,13 @@ void process_init()
 	
 	pq = (process_PQ *)s_request_memory_block();
 	
-
-	/* initialize the first process	exception stack frame */
-	pcb1 = (pcb_t *)s_request_memory_block();
+	//TEST PROCESSSES
+	pcbTest1 = (pcb_t *)s_request_memory_block();
 	
-	pcb1->m_pid = 1;
-	pcb1->m_priority = 1;
+	pcbTest1->m_pid = 1;
+	pcbTest1->m_priority = 1;
 	
-	pcb1->m_state = NEW;
+	pcbTest1->m_state = NEW;
 	
 	sp  = stack1 + USR_SZ_STACK;
     
@@ -54,77 +54,61 @@ void process_init()
 	}
 	
 	*(--sp)  = INITIAL_xPSR;      /* user process initial xPSR */ 
-	*(--sp)  = (uint32_t) proc1;  /* PC contains the entry point of the process */
+	*(--sp)  = (uint32_t) procTestRequestMemoryBlock;  /* PC contains the entry point of the process */
 
 	for (i = 0; i < 6; i++) { /* R0-R3, R12 are cleared with 0 */
 		*(--sp) = 0x0;
 	}
-    pcb1->mp_sp = sp;
-
-
-	/* initialize the second process exception stack frame */
+    pcbTest1->mp_sp = sp;
 	
-	pcb2 = (pcb_t *)s_request_memory_block();
-  pcb2->m_pid = 2;
-	pcb2->m_priority = 2;
-	pcb2->m_state = NEW;
-
+	pcbTest2 = (pcb_t *)s_request_memory_block();
+	
+	pcbTest2->m_pid = 1;
+	pcbTest2->m_priority = 1;
+	
+	pcbTest2->m_state = NEW;
+	
 	sp  = stack2 + USR_SZ_STACK;
-    if (!(((uint32_t)sp) & 0x04)) {    
-	    sp--;  /* 8 bytes alignement adjustment to exception stack frame */
+    
+	/* 8 bytes alignement adjustment to exception stack frame */
+	if (!(((uint32_t)sp) & 0x04)) {
+	    --sp; 
 	}
 	
-	*(--sp) = INITIAL_xPSR;
-	*(--sp) = (uint32_t) proc2;
+	*(--sp)  = INITIAL_xPSR;      /* user process initial xPSR */ 
+	*(--sp)  = (uint32_t) procTestReleaseMemoryBlock;  /* PC contains the entry point of the process */
 
-	for (i = 0; i < 6; i++) {
+	for (i = 0; i < 6; i++) { /* R0-R3, R12 are cleared with 0 */
 		*(--sp) = 0x0;
 	}
-	pcb2->mp_sp = sp;
+    pcbTest2->mp_sp = sp;
 	
-	//INIT PCB3
+	pcbTest3 = (pcb_t *)s_request_memory_block();
 	
-	pcb3 = (pcb_t *)s_request_memory_block();
-  pcb3->m_pid = 3;
-	pcb3->m_priority = 2;
-	pcb3->m_state = NEW;
-
+	pcbTest3->m_pid = 1;
+	pcbTest3->m_priority = 1;
+	
+	pcbTest3->m_state = NEW;
+	
 	sp  = stack3 + USR_SZ_STACK;
-    if (!(((uint32_t)sp) & 0x04)) {    
-	    sp--;  /* 8 bytes alignement adjustment to exception stack frame */
+    
+	/* 8 bytes alignement adjustment to exception stack frame */
+	if (!(((uint32_t)sp) & 0x04)) {
+	    --sp; 
 	}
 	
-	*(--sp) = INITIAL_xPSR;
-	*(--sp) = (uint32_t) proc3;
+	*(--sp)  = INITIAL_xPSR;      /* user process initial xPSR */ 
+	*(--sp)  = (uint32_t) procTestSomething;  /* PC contains the entry point of the process */
 
-	for (i = 0; i < 6; i++) {
+	for (i = 0; i < 6; i++) { /* R0-R3, R12 are cleared with 0 */
 		*(--sp) = 0x0;
 	}
-	pcb3->mp_sp = sp;
-	
-	pcb4 = (pcb_t *)s_request_memory_block();
-  pcb4->m_pid = 4;
-	pcb4->m_priority = 3;
-	pcb4->m_state = NEW;
-
-	sp  = stack4 + USR_SZ_STACK;
-    if (!(((uint32_t)sp) & 0x04)) {    
-	    sp--;  /* 8 bytes alignement adjustment to exception stack frame */
-	}
-	
-	*(--sp) = INITIAL_xPSR;
-	*(--sp) = (uint32_t) proc4;
-
-	for (i = 0; i < 6; i++) {
-		*(--sp) = 0x0;
-	}
-	pcb4->mp_sp = sp;
+    pcbTest3->mp_sp = sp;
 	
 	
-	pq_insert(pq, pcb1);
-	pq_insert(pq, pcb2);
-	pq_insert(pq, pcb3);
-	pq_insert(pq, pcb4);
+	pq_insert(pq, pcbTest1);
+	pq_insert(pq, pcbTest2);
+	pq_insert(pq, pcbTest3);
 }
 
 /*@brief: scheduler, pick the pid of the next to run process
@@ -139,20 +123,9 @@ int scheduler(void)
 	pcb_t *top;
 	
 	if (gp_current_process == NULL) {
-	  gp_current_process = pcb1;
-	  return 1;
+	  gp_current_process = pq_peekTop(pq);
 	}
 
-	//pid = gp_current_process->m_pid;
-	
-	//TEST CODE FOR get process ID FOR NOW
-	
-	//WANT TO POP OFF TOP OF HEAP
-	//RETURN WHAT IS THE CURRENT TOP OF HEAP
-	//RE-INSERT WHAT WAS JUST POPPED
-	
-	//pq_insert(pq, top);
-	
 	return pq_peekTop(pq)->m_pid;
 }
 /**

@@ -7,9 +7,10 @@
 
 #include "rtx.h"
 #include "uart_polling.h"
+#include <stdio.h>
 
 #ifdef DEBUG_0
-#include <stdio.h>
+//#include <stdio.h>
 #endif  /* DEBUG_0 */
 
 void procNull(void)
@@ -21,9 +22,91 @@ void procNull(void)
 	}
 }
 
-void procA(void)
+void procTestRequestMemoryBlock(void)
 {
+	volatile int i =0;
+	volatile int ret_val = 0;
 	
+	
+	//WRITE TEST CODE
+	//ONCE TEST CODE IS COMPLETE
+	//SWITCH CONTEXT
+	
+	int *firstBlock = (int *)s_request_memory_block();
+	int *secondBlock = (int *)s_request_memory_block();
+	
+	*firstBlock = 4;
+	*secondBlock = 4;
+	
+	if (firstBlock == secondBlock)
+	{
+		uart0_put_string("PROBLEM -- firstblock is equal to secondblock\n");
+	}
+	else
+	{
+		uart0_put_string("NOT A PROBLEM -- firstblock is not equal to secondblock\n");
+	}
+	
+	if (*firstBlock == *secondBlock)
+	{
+		uart0_put_string("NOT A PROBLEM -- the values of first block and second block are the same\n");
+	}
+	
+	if ((firstBlock + 32) == (secondBlock))
+	{
+		uart0_put_string("NOT A PROBLEM -- firstblock + 32 (128 bits) is second block\n");
+	}
+	
+	ret_val = release_processor();
+}
+
+
+void procTestReleaseMemoryBlock(void)
+{
+	volatile int ret_val = 0;
+	volatile int response = 1;
+	
+	int *firstBlock = (int *)s_request_memory_block();
+	int *secondBlock = (int *)s_request_memory_block();
+	int *thirdBlock;
+	
+	//sanity check
+	if (firstBlock == secondBlock)
+	{
+		uart0_put_string("PROBLEM -- firstblock is equal to secondblock\n");
+	}
+	response = s_release_memory_block(secondBlock);
+	
+	//test deletion works
+	if (response == 0)
+	{
+		uart0_put_string("NOT A PROBLEM -- successfull deletion\n");
+	}
+	else
+	{
+		uart0_put_string("PROBLEM -- not successfull deleted\n");
+	}
+	
+	thirdBlock = (int *)s_request_memory_block();
+	if ((firstBlock + 32) == (thirdBlock))
+	{
+		uart0_put_string("NOT A PROBLEM -- firstblock + 32 (128 bits) is third block\n");
+	}
+	
+	
+	
+	ret_val = release_processor();
+}
+
+void procTestSomething(void)
+{
+	volatile int ret_val = 0;
+	
+	//while (1)
+	{
+		uart0_put_string("Test3\n");
+		ret_val = release_processor();
+	}
 }
 
 void proc1(void)
@@ -102,3 +185,4 @@ void proc4(void)
     i++;
   }
 }
+

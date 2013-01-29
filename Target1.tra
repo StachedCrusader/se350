@@ -7,10 +7,9 @@
 ### List of Objects: adding '"main.o"'
 ### List of Objects: adding '"process.o"'
 ### List of Objects: adding '"hal.o"'
-### List of Objects: adding '"queue.o"'
 ### List of Objects: adding '"user_proc.o"'
 ### ADS-LD Command completed:
---cpu Cortex-M3 "startup_lpc17xx.o" "system_lpc17xx.o" "uart_polling.o" "main.o" "process.o" "hal.o" "queue.o" "user_proc.o" 
+--cpu Cortex-M3 "startup_lpc17xx.o" "system_lpc17xx.o" "uart_polling.o" "main.o" "process.o" "hal.o" "user_proc.o" 
 --strict --scatter "Target1.sct" 
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols 
 --info sizes --info totals --info unused --info veneers 
@@ -18,7 +17,7 @@
 ### ADS-LD Output File: 'Target1.axf'
 ### ADS-LD Command File: 'Target1.lnp'
 ### Checking for dirty Components...
-### Creating CmdFile 'Target1.lnp', Handle=0x00001DCC
+### Creating CmdFile 'Target1.lnp', Handle=0x00001438
 ### Writing '.lnp' file
 ### ADS-LD Command file 'Target1.lnp' is ready.
 ### ADS-LD: About to start ADS-LD Thread.
