@@ -73,31 +73,6 @@ int linearSearch(process_PQ *, int);
   so we use statically allocated stack to simplify the code.
 */
 
-uint32_t stackNull[USR_SZ_STACK];     /* stack for proc2 */
-
-uint32_t stack1[USR_SZ_STACK];     /* stack for proc1 */
-uint32_t stack2[USR_SZ_STACK];     /* stack for proc2 */
-uint32_t stack3[USR_SZ_STACK];     /* stack for proc3 */
-uint32_t stack4[USR_SZ_STACK];     /* stack for proc4 */
-
-process_PQ * pq;
-
-pcb_t *pcbNull;
-pcb_t *pcb1;
-pcb_t *pcb2;
-
-pcb_t *pcb3;
-pcb_t *pcb4;
-
-pcb_t *pcbTest1;
-pcb_t *pcbTest2;
-pcb_t *pcbTest3;
-pcb_t *pcbTest4;
-pcb_t *pcbTest5;
-pcb_t *pcbTest6;
-
-pcb_t  *gp_current_process = NULL; /* always point to the current process */
-
 extern void process_init(void);    /* initialize all procs in the system */
 int scheduler(void);               /* pick the pid of the next to run process */
 int k_release_process(void);       /* kernel release_process function */
@@ -109,7 +84,7 @@ extern void proc4(void);           /* user process 4 */
 
 extern void procTestRequestMemoryBlock(void);           
 extern void procTestReleaseMemoryBlock(void);           
-extern void procTestSomething(void);
+extern void procTestProcPQ(void);
 
 extern void procNULL(void);           /* user process NULL */
 extern void procA(void);           /* user process  */

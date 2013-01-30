@@ -6,8 +6,8 @@
  */
 
 #include "rtx.h"
-#include "uart_polling.h"
-#include <stdio.h>
+#include "user_proc.h"
+#include "process.h"
 
 #ifdef DEBUG_0
 //#include <stdio.h>
@@ -26,7 +26,6 @@ void procTestRequestMemoryBlock(void)
 {
 	volatile int i =0;
 	volatile int ret_val = 0;
-	
 	
 	//WRITE TEST CODE
 	//ONCE TEST CODE IS COMPLETE
@@ -93,14 +92,66 @@ void procTestReleaseMemoryBlock(void)
 		uart0_put_string("NOT A PROBLEM -- firstblock + 32 (128 bits) is third block\n");
 	}
 	
-	
-	
 	ret_val = release_processor();
 }
 
-void procTestSomething(void)
+void procTestProcPQ(void)
 {
 	volatile int ret_val = 0;
+	
+	process_PQ *pq = (process_PQ *)s_request_memory_block();
+	
+	pcb_t *pcb1 = (pcb_t *)s_request_memory_block();
+	pcb_t *pcb2 = (pcb_t *)s_request_memory_block();
+	pcb_t *pcb3 = (pcb_t *)s_request_memory_block();
+	pcb_t *pcb4 = (pcb_t *)s_request_memory_block();
+	
+	pcb1->m_priority = 2;
+	pcb1->m_pid = 1;
+	
+	pcb2->m_priority = 3;
+	pcb2->m_pid = 2;
+	
+	pcb3->m_priority = 1;
+	pcb3->m_pid = 3;
+	
+	pcb4->m_priority = 1;
+	pcb4->m_pid = 4;
+	
+	pq_insert(pq, pcb1);
+	
+	if (pq_peekTop(pq) == pcb1)
+	{
+		uart0_put_string("NOT A PROBLEM -- PCB1 is in the PQ\n");
+	}
+	
+	pq_insert(pq, pcb2);
+	
+	if (pq_peekTop(pq) == pcb2)
+	{
+		uart0_put_string("PROBLEM -- PCB2 SHOULD NOT BE THE TOP\n");
+	}
+	
+	pq_insert(pq, pcb3);
+	
+	if (pq_peekTop(pq) == pcb3)
+	{
+		uart0_put_string("NOT A PROBLEM -- PCB3 is on the top of the PQ\n");
+	}
+	
+	pq_insert(pq, pcb4);
+	
+	if (pq_peekTop(pq) == pcb4)
+	{
+		uart0_put_string("PROBLEM -- PCB4 should not be on top of the PQ\n");
+	}
+	
+	pq_removeTop(pq);
+	
+	if (pq_peekTop(pq) == pcb4)
+	{
+		uart0_put_string("NOT A PROBLEM -- PCB4 should be on top of the PQ\n");
+	}
 	
 	//while (1)
 	{

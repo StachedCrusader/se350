@@ -31,6 +31,26 @@
  *       proc1 and proc2 symbols. We leave all these imperfections as excercies to the reader 
  */
  
+ uint32_t stackNull[USR_SZ_STACK];     /* stack for proc2 */
+
+uint32_t stack1[USR_SZ_STACK];     /* stack for proc1 */
+uint32_t stack2[USR_SZ_STACK];     /* stack for proc2 */
+uint32_t stack3[USR_SZ_STACK];     /* stack for proc3 */
+uint32_t stack4[USR_SZ_STACK];     /* stack for proc4 */
+
+process_PQ * pq;
+
+pcb_t *pcbNull;
+
+pcb_t *pcbTest1;
+pcb_t *pcbTest2;
+pcb_t *pcbTest3;
+pcb_t *pcbTest4;
+pcb_t *pcbTest5;
+pcb_t *pcbTest6;
+
+pcb_t  *gp_current_process = NULL; /* always point to the current process */ 
+ 
 void process_init() 
 {
   volatile int i;
@@ -98,7 +118,7 @@ void process_init()
 	}
 	
 	*(--sp)  = INITIAL_xPSR;      /* user process initial xPSR */ 
-	*(--sp)  = (uint32_t) procTestSomething;  /* PC contains the entry point of the process */
+	*(--sp)  = (uint32_t) procTestProcPQ;  /* PC contains the entry point of the process */
 
 	for (i = 0; i < 6; i++) { /* R0-R3, R12 are cleared with 0 */
 		*(--sp) = 0x0;
